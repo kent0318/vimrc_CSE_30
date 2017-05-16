@@ -53,6 +53,7 @@ endfunction
 function TestFileTemplate()
 	let tobeTest = split(split(expand("%"), "test")[0], "\\.c")[0]
 	let pa = split(system("ls pa?.h"), "\n")[0]
+	call Append	("#include <stdlib.h>")
 	call Append	("#include \"".pa."\"")
 	call Append	("#include \"test.h\"")
 	call Append	("")
@@ -86,7 +87,7 @@ function TestFileTemplate()
 	call Append	(" */")
 	call Append	("int main() {")
 	call Append	("  test".tobeTest."();")
-	call Append	("  return 0")
+	call Append	("  return 0;")
 	call Append	("}")
 	unlet tobeTest
 	unlet prototype
@@ -94,7 +95,57 @@ function TestFileTemplate()
 	unlet pa
 endfunction
  imap <F7> <ESC>mz:execute TestFileTemplate()<CR>
-	
+
+function AssemblyTemplate()
+	let name = split(expand("%"), "\\.s")[0]
+	let pa = split(system("ls pa?.h"), "\n")[0]
+	call Append	("	.global ".name."	! Declares the symbol to be globally visible so")
+	call Append	("				! we can call this function from other modules.")
+	call Append	("")
+	call Append	("	.section \".text\"	! The text segment begins here")
+	call Append	("")
+	call Append	("/*")
+	call Append  	(" * Function name: ".name."()")
+	let prototype = split(split(system("grep -n ".name." ".pa), ":")[1], "\n")[0]
+	let line = split(system("grep -n ".name." ".pa), ":")[0]
+	call Append  	(" * Function prototype: ".prototype)
+	call Append  	(" * Description: ")
+	let param =  split(prototype, "( ")
+	if len(param) <= 1
+		call Append  (" * Parameters: None")
+	else 
+		let param = split(split(param[1], " )")[0], ", ")
+		call Append  (" * Parameters:")
+		call Append  (" *	arg 1: ".param[0]." -- ")
+		call remove  (param, 0)
+		let i = 2
+		for each in param
+			call Append (" *	arg ".i.": ".each." -- ")
+			let i += 1
+		endfor
+		unlet i
+	endif
+	call Append	(" * Side Effects: ")
+	call Append	(" * Error Conditions: ")
+	call Append	(" * Return Value: ")
+	call Append	(" * Registraters Used: ")
+	call Append	(" */")
+	call Append	("")
+	call Append	(name.":")
+	call Append	("	save	%sp, [TODO], %sp	! Save caller's window;")
+	call Append	("")
+	call Append	("/* TODO */")
+	call Append	("")
+	call Append	("	ret			! Return from subroutine")
+	call Append	("	restore			! Restore caller's window; in \"ret\" delay slot")
+	unlet name
+	unlet param
+	unlet line
+	unlet prototype
+endfunction
+ imap <F8> <ESC>mz:execute AssemblyTemplate()<CR>
+
+
 	
 " ~/.vimrc
 " Lisa McCutcheon
