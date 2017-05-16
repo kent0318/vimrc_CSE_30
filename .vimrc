@@ -146,6 +146,56 @@ endfunction
  imap <F8> <ESC>mz:execute AssemblyTemplate()<CR>
 
 
+function ReadmeFileTemplate()
+	let pa = split(system("ls pa?.h"), ".h\n")[0]
+	call Append	("----------------------[ ".pa." README ]-----------------------")
+	call Append	("")
+	call Append	("Author: TODO")
+	call Append	("Userid: TODO")
+	call Append	("")
+	call Append	("Date: " .strftime("%b %d %Y"))
+	call Append	("")
+	call Append	("----------------------[  DESCRIPTION  ]-------------------------")
+	call Append	("TODO - High level descrption of what your program does")
+	call Append	("")
+	call Append	("----------------------[  COMPILATION  ]-------------------------")
+	call Append	("    To compile this program, simply navigate to the directory containing the")
+	call Append	("source files for ".pa." (which should include the Makefile) and tyle 'make'")
+	call Append	("")
+	call Append	("    To run the program, type the executable name followed by ______")
+	call Append	("")
+	call Append	("For example:")
+	call Append	("")
+	call Append	("")
+	call Append	("----------------------[ SAMPLE OUTPUT ]-------------------------")
+	call Append	("    Normal output is printed to stdout. An example of normal output would be")
+	call Append	("the following:")
+	call Append	("")
+	call Append	("    Abnormal output is printed to stderr. This can occur if_______")
+	call Append	("")
+	call Append	("For example:")
+	call Append	("")
+	call Append	("----------------------[    TESTING    ]-------------------------")
+	call Append	("This program was tested using the sample ".pa."test executable that was")
+	call Append	("provdied. Both programs were run with the same input and their outputs were")
+	call Append	("redirected to two different files (this program to ____ and ".pa."test to ___)")
+	call Append	("These outputs were then comapred using the command line tool 'diff'. When there")
+	call Append	("were no differences in the output for numerous test cases, it indicated that my")
+	call Append	("program was functioning properly.")
+	call Append	("")
+	call Append	("Furthermore, the ____ function was unit tested to ensure that it returns")
+	call Append	("the proper value (_____). Test inputs included ___________________")
+	call Append	("_____TODO_____")
+	call Append	("")
+	call Append	("")
+	call Append	("")
+	call Append	("")
+	call Append	("----------------------[   QUESTIONS   ]-------------------------")
+	call Append	("TODO")
+	call Append	("")
+	unlet pa
+endfunction
+ imap <F4> <ESC>mz: execute ReadmeFileTemplate()<CR> 
 	
 " ~/.vimrc
 " Lisa McCutcheon
